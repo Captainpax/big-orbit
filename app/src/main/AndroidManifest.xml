@@ -14,6 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BigOrbit"
         android:usesCleartextTraffic="${usesCleartextTraffic}">
+        <activity android:name=".ManagementActivity" />
         <activity android:name=".DevicesActivity" />
         <activity android:name=".OperationsActivity" />
         <activity android:name=".AiObservatoryActivity" />

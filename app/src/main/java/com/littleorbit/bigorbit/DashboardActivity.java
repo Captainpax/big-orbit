@@ -1,10 +1,12 @@
 package com.littleorbit.bigorbit;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +27,12 @@ public final class DashboardActivity extends ConsoleActivity {
                 "The few things that need an owner decision, ordered by urgency.",
                 R.id.nav_inbox);
         primaryAction.setText(R.string.acknowledge_alerts);
+        secondaryAction.setText(R.string.owner_controls);
         primaryAction.setVisibility(View.VISIBLE);
+        secondaryAction.setVisibility(View.VISIBLE);
         primaryAction.setOnClickListener(ignored -> acknowledge());
+        secondaryAction.setOnClickListener(ignored ->
+                startActivity(new Intent(this, ManagementActivity.class)));
         askNotificationPermission();
         refresh();
     }
@@ -46,6 +52,7 @@ public final class DashboardActivity extends ConsoleActivity {
             renderItem(item);
         }
         primaryAction.setEnabled(!visibleAlertIds.isEmpty());
+        secondaryAction.setEnabled(true);
         finishCards(items.length() == 0, R.string.empty_inbox);
     }
 
@@ -59,17 +66,51 @@ public final class DashboardActivity extends ConsoleActivity {
                     item.optString("summary", "Open the relevant destination to review."),
                     item.optString("created_at", ""));
         } else if ("question_report".equals(type)) {
-            addCard(
+            View card = addCard(
                     "GLOBAL QUESTION REPORT",
                     item.optString("prompt", "Question under review"),
                     item.optString("reason", "A safety report needs a decision."),
-                    item.optString("created_at", ""));
+                    "Tap to resolve · " + item.optString("created_at", ""));
+            String reportId = item.optString("id");
+            String prompt = item.optString("prompt", "Question under review");
+            if (!reportId.isBlank()) {
+                card.setClickable(true);
+                card.setFocusable(true);
+                card.setContentDescription("Review reported question: " + prompt);
+                card.setOnClickListener(ignored -> reviewReport(reportId, prompt));
+            }
         } else {
             addCard(
                     "ALLOWLISTED JOB",
                     item.optString("kind", "Operations job"),
                     "Status: " + item.optString("status", "unknown"),
                     item.optString("created_at", ""));
+        }
+    }
+
+    private void reviewReport(String reportId, String prompt) {
+        int[] choice = {0};
+        new AlertDialog.Builder(this)
+                .setTitle("Resolve question report")
+                .setMessage(prompt)
+                .setSingleChoiceItems(
+                        new String[]{"Keep the global question", "Disable it globally"},
+                        0,
+                        (dialog, selected) -> choice[0] = selected)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton("Resolve", (dialog, which) ->
+                        resolveReport(reportId, choice[0] == 1))
+                .show();
+    }
+
+    private void resolveReport(String reportId, boolean disableQuestion) {
+        try {
+            post(
+                    "/v2/admin/question-reports/" + reportId + "/resolve",
+                    new JSONObject().put("disable_question", disableQuestion),
+                    this::refresh);
+        } catch (org.json.JSONException invalid) {
+            throw new IllegalStateException(invalid);
         }
     }
 

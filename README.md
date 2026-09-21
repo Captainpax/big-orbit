@@ -14,8 +14,10 @@ account exports.
 - Password plus TOTP/recovery authentication and in-app first-owner MFA setup.
 - P-256 Android Keystore enrollment and signed, one-use server challenges.
 - A separately encrypted 90-day device credential and rotating 30-minute API sessions.
-- Action inbox, thresholded quiz ratings, AI run/policy observability, encrypted-backup
-  evidence, typed operation requests, and enrolled-device revocation.
+- Action inbox with question-report decisions, thresholded quiz ratings, AI run/policy
+  observability, encrypted-backup evidence, typed operation requests, service health,
+  registration control, bounded account/session actions, security events, and enrolled-device
+  revocation.
 - First-party WorkManager polling with a generic lock-screen notification. No Firebase,
   hosted push broker, advertising SDK, or analytics SDK is present.
 - A side-by-side `smoke` build named **Big Orbit QA** with package

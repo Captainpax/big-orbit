@@ -53,30 +53,36 @@ public abstract class ConsoleActivity extends AppCompatActivity {
             @StringRes int title, String subtitle, int selectedNavigation) {
         ((TextView) findViewById(R.id.screenTitle)).setText(title);
         ((TextView) findViewById(R.id.screenSubtitle)).setText(subtitle);
-        ((BottomNavigationView) findViewById(R.id.bottomNavigation))
-                .setSelectedItemId(selectedNavigation);
+        if (selectedNavigation != 0) {
+            ((BottomNavigationView) findViewById(R.id.bottomNavigation))
+                    .setSelectedItemId(selectedNavigation);
+        }
     }
 
     protected abstract void refresh();
 
     protected final void loadObject(String path, Consumer<JSONObject> renderer) {
-        run(() -> sessions.authorizedObject(path), renderer);
+        run(() -> sessions.authorizedObject(path), renderer, true);
+    }
+
+    protected final void appendObject(String path, Consumer<JSONObject> renderer) {
+        run(() -> sessions.authorizedObject(path), renderer, false);
     }
 
     protected final void loadArray(String path, Consumer<JSONArray> renderer) {
-        run(() -> sessions.authorizedArray(path), renderer);
+        run(() -> sessions.authorizedArray(path), renderer, true);
     }
 
     protected final void post(String path, JSONObject body, Runnable completed) {
-        beginLoad();
-        executor.execute(() -> {
-            try {
-                sessions.authorizedPost(path, body);
-                main.post(completed);
-            } catch (Exception failure) {
-                main.post(this::showFailure);
-            }
-        });
+        mutate(() -> sessions.authorizedPost(path, body), completed);
+    }
+
+    protected final void put(String path, JSONObject body, Runnable completed) {
+        mutate(() -> sessions.authorizedPut(path, body), completed);
+    }
+
+    protected final void patch(String path, JSONObject body, Runnable completed) {
+        mutate(() -> sessions.authorizedPatch(path, body), completed);
     }
 
     protected final void delete(String path, Runnable completed) {
@@ -91,7 +97,7 @@ public abstract class ConsoleActivity extends AppCompatActivity {
         });
     }
 
-    protected final void addCard(String eyebrow, String title, String body, String meta) {
+    protected final View addCard(String eyebrow, String title, String body, String meta) {
         View card = LayoutInflater.from(this).inflate(
                 R.layout.item_console_card, content, false);
         ((TextView) card.findViewById(R.id.cardEyebrow)).setText(eyebrow);
@@ -99,6 +105,7 @@ public abstract class ConsoleActivity extends AppCompatActivity {
         ((TextView) card.findViewById(R.id.cardBody)).setText(body);
         ((TextView) card.findViewById(R.id.cardMeta)).setText(meta);
         content.addView(card);
+        return card;
     }
 
     protected final void finishCards(boolean empty, @StringRes int emptyText) {
@@ -118,12 +125,24 @@ public abstract class ConsoleActivity extends AppCompatActivity {
         });
     }
 
-    private <T> void run(Callable<T> request, Consumer<T> renderer) {
-        beginLoad();
+    private <T> void run(Callable<T> request, Consumer<T> renderer, boolean reset) {
+        if (reset) beginLoad();
         executor.execute(() -> {
             try {
                 T result = request.call();
                 main.post(() -> renderer.accept(result));
+            } catch (Exception failure) {
+                main.post(this::showFailure);
+            }
+        });
+    }
+
+    private void mutate(Callable<JSONObject> operation, Runnable completed) {
+        beginLoad();
+        executor.execute(() -> {
+            try {
+                operation.call();
+                main.post(completed);
             } catch (Exception failure) {
                 main.post(this::showFailure);
             }

@@ -20,6 +20,10 @@
     <string name="sign_out">Sign out locally</string>
     <string name="revoke_device">Revoke this device</string>
     <string name="acknowledge_alerts">Mark visible alerts read</string>
+    <string name="owner_controls">Owner controls</string>
+    <string name="owner_controls_title">Owner controls</string>
+    <string name="open_registration">Open registration</string>
+    <string name="pause_registration">Pause registration</string>
     <string name="loading">Looking through the telescope…</string>
     <string name="empty_inbox">All clear. No action is waiting.</string>
     <string name="network_error">Big Orbit could not reach the private operations API.</string>

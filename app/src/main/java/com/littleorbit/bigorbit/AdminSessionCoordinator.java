@@ -77,6 +77,24 @@ public final class AdminSessionCoordinator {
         }
     }
 
+    public JSONObject authorizedPut(String path, JSONObject body) throws Exception {
+        try {
+            return api.put(path, body, validToken());
+        } catch (ApiException failure) {
+            if (!reauthenticate(failure)) throw failure;
+            return api.put(path, body, refresh().accessToken());
+        }
+    }
+
+    public JSONObject authorizedPatch(String path, JSONObject body) throws Exception {
+        try {
+            return api.patch(path, body, validToken());
+        } catch (ApiException failure) {
+            if (!reauthenticate(failure)) throw failure;
+            return api.patch(path, body, refresh().accessToken());
+        }
+    }
+
     public JSONObject authorizedDelete(String path) throws Exception {
         try {
             return api.delete(path, null, validToken());

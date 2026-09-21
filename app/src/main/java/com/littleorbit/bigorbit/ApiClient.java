@@ -47,6 +47,16 @@ public final class ApiClient {
         return new JSONObject(execute("POST", path, body, token));
     }
 
+    public JSONObject put(String path, JSONObject body, String token)
+            throws IOException, ApiException, JSONException {
+        return new JSONObject(execute("PUT", path, body, token));
+    }
+
+    public JSONObject patch(String path, JSONObject body, String token)
+            throws IOException, ApiException, JSONException {
+        return new JSONObject(execute("PATCH", path, body, token));
+    }
+
     public JSONObject delete(String path, JSONObject body, String token)
             throws IOException, ApiException, JSONException {
         return new JSONObject(execute("DELETE", path, body, token));
