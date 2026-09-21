@@ -17,13 +17,20 @@ import org.json.JSONObject;
 public final class SecureSessionStore {
     private static final String ALIAS = "big-orbit-session-storage-v1";
     private static final String KEY = "sealed_admin_state";
+    private static final Object STATE_LOCK = new Object();
     private final SharedPreferences preferences;
 
     public SecureSessionStore(Context context) {
         preferences = context.getSharedPreferences("big_orbit_private", Context.MODE_PRIVATE);
     }
 
-    public synchronized State read() {
+    public State read() {
+        synchronized (STATE_LOCK) {
+            return readLocked();
+        }
+    }
+
+    private State readLocked() {
         String sealed = preferences.getString(KEY, null);
         if (sealed == null) return null;
         try {
@@ -33,12 +40,27 @@ public final class SecureSessionStore {
                     value.getString("device_credential"),
                     value.optString("access_token", ""));
         } catch (Exception invalid) {
-            clear();
+            preferences.edit().remove(KEY).apply();
             return null;
         }
     }
 
-    public synchronized void save(State state) throws Exception {
+    public void save(State state) throws Exception {
+        synchronized (STATE_LOCK) {
+            saveLocked(state);
+        }
+    }
+
+    public boolean replaceIfCurrent(State expected, State updated) throws Exception {
+        synchronized (STATE_LOCK) {
+            State current = readLocked();
+            if (!expected.equals(current)) return false;
+            saveLocked(updated);
+            return true;
+        }
+    }
+
+    private void saveLocked(State state) throws Exception {
         JSONObject value = new JSONObject()
                 .put("device_id", state.deviceId())
                 .put("device_credential", state.deviceCredential())
@@ -46,17 +68,21 @@ public final class SecureSessionStore {
         preferences.edit().putString(KEY, seal(value.toString())).apply();
     }
 
-    public synchronized void clear() {
-        preferences.edit().remove(KEY).apply();
+    public void clear() {
+        synchronized (STATE_LOCK) {
+            preferences.edit().remove(KEY).apply();
+        }
     }
 
-    public synchronized void clearAccessToken() {
-        State current = read();
-        if (current == null) return;
-        try {
-            save(new State(current.deviceId(), current.deviceCredential(), ""));
-        } catch (Exception failure) {
-            clear();
+    public void clearAccessToken() {
+        synchronized (STATE_LOCK) {
+            State current = readLocked();
+            if (current == null) return;
+            try {
+                saveLocked(new State(current.deviceId(), current.deviceCredential(), ""));
+            } catch (Exception failure) {
+                preferences.edit().remove(KEY).apply();
+            }
         }
     }
 

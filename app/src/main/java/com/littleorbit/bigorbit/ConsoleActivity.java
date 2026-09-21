@@ -34,7 +34,7 @@ public abstract class ConsoleActivity extends AppCompatActivity {
     protected void onCreate(Bundle state) {
         super.onCreate(state);
         sessions = new AdminSessionCoordinator(this);
-        if (!sessions.isEnrolled()) {
+        if (!sessions.isSignedIn()) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
             return;

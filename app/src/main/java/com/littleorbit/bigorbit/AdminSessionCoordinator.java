@@ -1,6 +1,7 @@
 package com.littleorbit.bigorbit;
 
 import android.content.Context;
+import androidx.core.app.NotificationManagerCompat;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -8,14 +9,21 @@ import org.json.JSONObject;
 public final class AdminSessionCoordinator {
     private final ApiClient api = new ApiClient();
     private final DeviceKeyStore keys = new DeviceKeyStore();
+    private final Context context;
     private final SecureSessionStore sessions;
 
     public AdminSessionCoordinator(Context context) {
-        sessions = new SecureSessionStore(context.getApplicationContext());
+        this.context = context.getApplicationContext();
+        sessions = new SecureSessionStore(this.context);
     }
 
     public boolean isEnrolled() {
         return sessions.read() != null;
+    }
+
+    public boolean isSignedIn() {
+        SecureSessionStore.State state = sessions.read();
+        return state != null && !state.accessToken().isBlank();
     }
 
     public String currentDeviceId() {
@@ -36,8 +44,10 @@ public final class AdminSessionCoordinator {
     public String validToken() throws Exception {
         SecureSessionStore.State state = sessions.read();
         if (state == null) throw new ApiException(403);
-        if (!state.accessToken().isBlank()) return state.accessToken();
-        return refresh().accessToken();
+        if (state.accessToken().isBlank()) {
+            throw new IllegalStateException("Big Orbit is locally signed out");
+        }
+        return state.accessToken();
     }
 
     public JSONObject authorizedObject(String path) throws Exception {
@@ -78,6 +88,7 @@ public final class AdminSessionCoordinator {
 
     public void signOut() {
         sessions.clearAccessToken();
+        NotificationManagerCompat.from(context).cancelAll();
     }
 
     public void forgetRevokedDevice() {
@@ -141,7 +152,9 @@ public final class AdminSessionCoordinator {
         JSONObject response = api.post("/v2/admin/device-session", request, null);
         SecureSessionStore.State updated = new SecureSessionStore.State(
                 state.deviceId(), state.deviceCredential(), response.getString("access_token"));
-        sessions.save(updated);
+        if (!sessions.replaceIfCurrent(state, updated)) {
+            throw new IllegalStateException("Big Orbit session changed during refresh");
+        }
         return updated;
     }
 

@@ -31,7 +31,7 @@ public final class AlertPollWorker extends Worker {
     @Override
     public Result doWork() {
         AdminSessionCoordinator sessions = new AdminSessionCoordinator(getApplicationContext());
-        if (!sessions.isEnrolled() || !notificationsAllowed()) return Result.success();
+        if (!sessions.isSignedIn() || !notificationsAllowed()) return Result.success();
         try {
             JSONArray alerts = sessions.authorizedArray(
                     "/v2/admin/alerts?acknowledged=false");
