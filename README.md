@@ -5,9 +5,12 @@ Big Orbit is the free, open-source Android owner console for
 the public website and onto an explicitly enrolled device with a non-exportable Android
 Keystore key.
 
-The verified 1.0.0 release candidate uses package `com.littleorbit.bigorbit`, version code 2,
-and an independent pinned signer. It is not published until the two-device production enrollment
-and revocation checks finish.
+[Big Orbit 1.0.0](https://github.com/Captainpax/big-orbit/releases/tag/v1.0.0) is published with
+package `com.littleorbit.bigorbit`, version code 2, and an independent pinned signer. Its exact
+2,475,090-byte APK has SHA-256
+`ef4c10509709504394078835d1b74db44788999fff65dfb0f68e8bee7821a824`.
+The owner waived production two-device enrollment and revocation as publication gates and will
+perform that live QA separately.
 
 The app intentionally handles operational metadata only. It cannot browse relationship
 notes, quiz answers, custom questions, precise locations, attachments, Smooch content, or
@@ -63,11 +66,12 @@ The release certificate is pinned independently through
 
 ```powershell
 $env:BIG_ORBIT_SIGNING_ENV_FILE = "C:\protected\big-orbit-signing.env"
-.\scripts\build-release.ps1
+.\scripts\build-release.ps1 -DeviceSerial <adb-serial>
 ```
 
-The verifier rejects the wrong package, version, or certificate and writes only public
-hash/size/certificate metadata under the ignored `verification-output` directory.
+The verifier rejects the wrong package, version, or certificate, cold-launches the exact minified
+APK when a device serial is supplied, and writes only public hash/size/certificate metadata under
+the ignored `verification-output` directory.
 
 ## Visual baseline
 

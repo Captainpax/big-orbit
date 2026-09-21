@@ -22,18 +22,25 @@
 
 No release or hardware validation is implied by the presence of this guide.
 
-## 1.0.0 candidate contract
+## Published 1.0.0 identity
 
 - Package: `com.littleorbit.bigorbit`; version `1.0.0`; version code `2`.
+- Size: 2,475,090 bytes.
+- SHA-256: `ef4c10509709504394078835d1b74db44788999fff65dfb0f68e8bee7821a824`.
 - Certificate SHA-256: `04dc3502933faaa99dfd6641acc52b2bd71c9895087cb3060e3ce92dd8406f8c`.
 - The artifact contains no smoke package, label, endpoint, signing metadata, or bundled QA APK.
 
-The exact size and APK SHA-256 come from the verifier run on the final tagged preparation commit;
-they are recorded in its ignored verification JSON, the GitHub release assets, and the later
-rollout-evidence commit. Publish those bytes only after the production API exposes device-bound
-`/v2/admin`, both recovery devices enroll, and cross-device revocation succeeds.
+The exact APK and verification JSON are published at
+[`v1.0.0`](https://github.com/Captainpax/big-orbit/releases/tag/v1.0.0). The production Little
+Orbit API exposes only device-bound `/v2/admin`; the legacy web and `/v1/admin` routes return 404.
+The owner waived production two-device enrollment, cross-device revocation, alert, and recovery
+observation as publication gates and will report that QA later. Those checks are not treated as
+passed by this release record.
 
 Version code 1 was signed but failed its exact release-mode launch check because R8 removed the
 reflectively created WorkManager Room database constructor. It was never published and is not
 reused. Code 2 keeps that constructor and makes a real minified-device launch part of the release
 gate.
+
+The signer remains protected outside Git on the release host. The owner waived a durable off-host
+signer backup until the replacement server is available; that recovery gap remains open.
