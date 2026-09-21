@@ -11,20 +11,22 @@
    `./scripts/build-release.ps1 -SigningEnvironment C:\protected\big-orbit-signing.env`.
 5. Inspect the manifest for package `com.littleorbit.bigorbit`, version code 1, version 1.0.0,
    HTTPS-only traffic, disabled backup, and no QA label or endpoint.
-6. Retain the generated `verification-output/big-orbit-1.0.0.json`, then publish the exact APK
-   bytes it describes. The verifier pins the independent release certificate and rejects the
+6. Commit the final release-preparation tree before the last build. Android embeds source-control
+   provenance, so any later commit can produce different APK bytes even when app code is unchanged.
+7. From that clean commit, retain the generated
+   `verification-output/big-orbit-1.0.0.json`, create the release tag, and publish only the exact
+   APK bytes it describes. The verifier pins the independent release certificate and rejects the
    wrong package or version. A failed candidate's version code and bytes are not reused.
 
 No release or hardware validation is implied by the presence of this guide.
 
-## Verified 1.0.0 candidate
+## 1.0.0 candidate contract
 
 - Package: `com.littleorbit.bigorbit`; version `1.0.0`; version code `1`.
-- Size: 2,390,730 bytes.
-- SHA-256: `8a5bf42ae8c2f9786f880f648ff5c58fbfdf9ba62d87e612c3ff3c19b705f2b6`.
 - Certificate SHA-256: `04dc3502933faaa99dfd6641acc52b2bd71c9895087cb3060e3ce92dd8406f8c`.
 - The artifact contains no smoke package, label, endpoint, signing metadata, or bundled QA APK.
 
-This identity is a verified candidate, not publication evidence. Publish these exact bytes only
-after the production API exposes device-bound `/v2/admin`, both recovery devices enroll, and
-cross-device revocation succeeds.
+The exact size and APK SHA-256 come from the verifier run on the final tagged preparation commit;
+they are recorded in its ignored verification JSON, the GitHub release assets, and the later
+rollout-evidence commit. Publish those bytes only after the production API exposes device-bound
+`/v2/admin`, both recovery devices enroll, and cross-device revocation succeeds.
