@@ -45,7 +45,7 @@ never a production candidate.
 
 ## Visual baseline
 
-The five sheets in [`docs/concepts`](docs/concepts) are high-resolution concept imagery,
+The four sheets in [`docs/concepts`](docs/concepts) are high-resolution concept imagery,
 not production screenshots. The current Java/XML interface follows their navy, lavender,
 coral, amber, orbital-line, and soft-glow system while keeping large touch targets and
 dynamic Android text.
