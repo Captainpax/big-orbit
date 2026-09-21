@@ -13,10 +13,19 @@ public final class EndpointPolicy {
             return false;
         }
         if (qaBuild) {
-            return ("http".equals(url.scheme()) && "10.0.2.2".equals(url.host()))
-                    || ("https".equals(url.scheme())
-                    && "lil-orb.pax-kun.com".equals(url.host()));
+            return smokeLoopback(url) || production(url);
         }
+        return production(url);
+    }
+
+    private static boolean smokeLoopback(HttpUrl url) {
+        return "http".equals(url.scheme())
+                && "127.0.0.1".equals(url.host())
+                && url.port() == 18180
+                && "/api".equals(url.encodedPath());
+    }
+
+    private static boolean production(HttpUrl url) {
         return "https".equals(url.scheme())
                 && "lil-orb.pax-kun.com".equals(url.host())
                 && url.port() == 443

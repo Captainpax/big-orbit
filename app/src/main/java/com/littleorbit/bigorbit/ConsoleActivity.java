@@ -110,7 +110,7 @@ public abstract class ConsoleActivity extends AppCompatActivity {
 
     protected final void finishCards(boolean empty, @StringRes int emptyText) {
         loading.setVisibility(View.GONE);
-        status.setText(empty ? emptyText : 0);
+        status.setText(empty ? getString(emptyText) : "");
         status.setVisibility(empty ? View.VISIBLE : View.GONE);
     }
 

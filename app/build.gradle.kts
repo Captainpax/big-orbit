@@ -30,7 +30,7 @@ android {
             versionNameSuffix = "-qa"
             manifestPlaceholders["appLabel"] = "Big Orbit QA"
             manifestPlaceholders["usesCleartextTraffic"] = "true"
-            buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:18180/api\"")
+            buildConfigField("String", "API_BASE_URL", "\"http://127.0.0.1:18180/api\"")
             matchingFallbacks += listOf("debug")
         }
         release {

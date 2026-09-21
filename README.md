@@ -5,6 +5,10 @@ Big Orbit is the free, open-source Android owner console for
 the public website and onto an explicitly enrolled device with a non-exportable Android
 Keystore key.
 
+The verified 1.0.0 release candidate uses package `com.littleorbit.bigorbit`, version code 1,
+and an independent pinned signer. It is not published until the two-device production enrollment
+and revocation checks finish.
+
 The app intentionally handles operational metadata only. It cannot browse relationship
 notes, quiz answers, custom questions, precise locations, attachments, Smooch content, or
 account exports.
@@ -16,8 +20,8 @@ account exports.
 - A separately encrypted 90-day device credential and rotating 30-minute API sessions.
 - Action inbox with question-report decisions, thresholded quiz ratings, AI run/policy
   observability, encrypted-backup evidence, typed operation requests, service health,
-  registration control, bounded account/session actions, security events, and enrolled-device
-  revocation.
+  registration control, bounded account/session actions, security events, and explicit revocation
+  for either the current device or any other enrolled/pending key.
 - First-party WorkManager polling with a generic lock-screen notification. No Firebase,
   hosted push broker, advertising SDK, or analytics SDK is present.
 - A side-by-side `smoke` build named **Big Orbit QA** with package
@@ -29,7 +33,12 @@ Requirements: JDK 17 and Android SDK 37.
 
 ```powershell
 .\gradlew.bat :app:testDebugUnitTest :app:assembleSmoke :app:lintSmoke
+adb -s <serial> reverse tcp:18180 tcp:18180
 ```
+
+The smoke package accepts only the fixed `http://127.0.0.1:18180/api` endpoint. The ADB
+reverse tunnel keeps emulator and physical-device QA on the isolated local stack without
+weakening the server's trusted-host policy.
 
 Release builds deliberately require a signer that is independent from Little Orbit:
 
@@ -42,6 +51,23 @@ BIG_ORBIT_SIGNING_KEY_PASSWORD
 
 Signer values and keystores must remain outside Git. An unsigned or debug-signed build is
 never a production candidate.
+
+Create a new local signer once (this refuses to overwrite an existing signer):
+
+```powershell
+.\scripts\create-local-signer.ps1
+```
+
+The release certificate is pinned independently through
+`BIG_ORBIT_SIGNING_CERT_SHA256`. Build and verify one immutable candidate with:
+
+```powershell
+$env:BIG_ORBIT_SIGNING_ENV_FILE = "C:\protected\big-orbit-signing.env"
+.\scripts\build-release.ps1
+```
+
+The verifier rejects the wrong package, version, or certificate and writes only public
+hash/size/certificate metadata under the ignored `verification-output` directory.
 
 ## Visual baseline
 

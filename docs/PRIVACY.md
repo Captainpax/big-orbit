@@ -12,5 +12,6 @@ The device credential and short access token are encrypted with an AES-GCM key h
 Keystore. The P-256 private key is non-exportable. Android cloud backup and device transfer are
 disabled. Local sign-out removes the short access token and stops background polling until the
 owner signs in with password and MFA again; it retains the encrypted 90-day device credential so
-the already enrolled key does not need re-enrollment. Server revocation disables
-the credential and every bound session, then Big Orbit deletes its local credential and P-256 key.
+the already enrolled key does not need re-enrollment. Server revocation disables the selected
+credential and every bound session. Revoking the current device also deletes its local credential
+and P-256 key; revoking another device leaves its now-useless private key on that device.

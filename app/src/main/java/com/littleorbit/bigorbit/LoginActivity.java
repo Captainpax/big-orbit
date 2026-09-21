@@ -73,7 +73,7 @@ public final class LoginActivity extends AppCompatActivity {
     private void busy(boolean value) {
         progress.setVisibility(value ? View.VISIBLE : View.GONE);
         findViewById(R.id.loginButton).setEnabled(!value);
-        status.setText(value ? R.string.verifying_device : 0);
+        status.setText(value ? getString(R.string.verifying_device) : "");
     }
 
     private static String text(TextInputEditText input, boolean trim) {

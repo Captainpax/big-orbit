@@ -4,5 +4,7 @@
 /**/build/
 *.jks
 *.keystore
+*.p12
+.env.big-orbit-signing
 *.properties.local
 /verification-output/

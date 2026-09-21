@@ -16,9 +16,11 @@ public final class EndpointPolicyTest {
     }
 
     @Test
-    public void qaAllowsOnlyFixedEmulatorOrProductionAuthority() {
-        assertTrue(EndpointPolicy.trusted("http://10.0.2.2:18180/api", true));
+    public void qaAllowsOnlyFixedReverseTunnelOrProductionAuthority() {
+        assertTrue(EndpointPolicy.trusted("http://127.0.0.1:18180/api", true));
         assertTrue(EndpointPolicy.trusted("https://lil-orb.pax-kun.com/api", true));
-        assertFalse(EndpointPolicy.trusted("http://127.0.0.1:18180/api", true));
+        assertFalse(EndpointPolicy.trusted("http://10.0.2.2:18180/api", true));
+        assertFalse(EndpointPolicy.trusted("http://127.0.0.1:18181/api", true));
+        assertFalse(EndpointPolicy.trusted("http://127.0.0.1:18180/other", true));
     }
 }

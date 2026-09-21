@@ -8,7 +8,7 @@ import java.util.Objects;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-/** Enrolled key inventory with explicit local sign-out and current-key revocation. */
+/** Enrolled key inventory with explicit local sign-out and per-key revocation. */
 public final class DevicesActivity extends ConsoleActivity {
     @Override
     protected void onCreate(Bundle state) {
@@ -38,13 +38,24 @@ public final class DevicesActivity extends ConsoleActivity {
             JSONObject item = items.optJSONObject(index);
             if (item == null) continue;
             boolean thisDevice = Objects.equals(current, item.optString("id"));
+            boolean revoked = !item.isNull("revoked_at");
+            boolean pending = item.isNull("approved_at");
+            String id = item.optString("id");
+            String label = item.optString("label", "Big Orbit device");
             String body = "Key " + shortHash(item.optString("key_fingerprint"))
                     + "\nLast seen: " + item.optString("last_seen_at", "never");
-            addCard(
+            String state = revoked ? "Revoked" : pending ? "Pending" : "Active";
+            View card = addCard(
                     thisDevice ? "THIS DEVICE" : "ENROLLED DEVICE",
-                    item.optString("label", "Big Orbit device"),
+                    label,
                     body,
-                    item.isNull("revoked_at") ? "Active" : "Revoked");
+                    !thisDevice && !revoked ? state + " · tap to revoke" : state);
+            if (!thisDevice && !revoked && !id.isBlank()) {
+                card.setClickable(true);
+                card.setFocusable(true);
+                card.setContentDescription("Revoke Big Orbit device " + label);
+                card.setOnClickListener(ignored -> confirmRevocation(id, label, false));
+            }
         }
         primaryAction.setEnabled(true);
         secondaryAction.setEnabled(current != null);
@@ -52,18 +63,24 @@ public final class DevicesActivity extends ConsoleActivity {
     }
 
     private void confirmRevocation() {
+        String id = sessions.currentDeviceId();
+        if (id == null) return;
+        confirmRevocation(id, "this device", true);
+    }
+
+    private void confirmRevocation(String id, String label, boolean current) {
         new AlertDialog.Builder(this)
-                .setTitle("Revoke this Big Orbit device?")
+                .setTitle(current ? "Revoke this Big Orbit device?" : "Revoke " + label + "?")
                 .setMessage("Its credential and every bound session will stop working immediately.")
                 .setNegativeButton(android.R.string.cancel, null)
-                .setPositiveButton("Revoke", (dialog, which) -> revokeCurrent())
+                .setPositiveButton("Revoke", (dialog, which) -> revoke(id, current))
                 .show();
     }
 
-    private void revokeCurrent() {
-        String id = sessions.currentDeviceId();
-        if (id == null) return;
-        delete("/v2/admin/devices/" + id, this::forgetRevokedDevice);
+    private void revoke(String id, boolean current) {
+        delete(
+                "/v2/admin/devices/" + id,
+                current ? this::forgetRevokedDevice : this::refresh);
     }
 
     private void localSignOut() {
