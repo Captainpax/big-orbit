@@ -5,7 +5,7 @@ Big Orbit is the free, open-source Android owner console for
 the public website and onto an explicitly enrolled device with a non-exportable Android
 Keystore key.
 
-The verified 1.0.0 release candidate uses package `com.littleorbit.bigorbit`, version code 1,
+The verified 1.0.0 release candidate uses package `com.littleorbit.bigorbit`, version code 2,
 and an independent pinned signer. It is not published until the two-device production enrollment
 and revocation checks finish.
 

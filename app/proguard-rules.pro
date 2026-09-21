@@ -1,2 +1,3 @@
 -keepattributes Signature,*Annotation*
+-keep class * extends androidx.room.RoomDatabase { <init>(); }
 -dontwarn org.conscrypt.**

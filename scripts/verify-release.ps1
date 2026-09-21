@@ -66,7 +66,7 @@ if ($expected.Length -ne 64 -or $certificate -ne $expected) {
 $packageName = (& $apkanalyzer manifest application-id $apkPath).Trim()
 $versionCode = [int](& $apkanalyzer manifest version-code $apkPath).Trim()
 $versionName = (& $apkanalyzer manifest version-name $apkPath).Trim()
-if ($packageName -ne "com.littleorbit.bigorbit" -or $versionCode -ne 1 -or
+if ($packageName -ne "com.littleorbit.bigorbit" -or $versionCode -ne 2 -or
         $versionName -ne "1.0.0") {
     throw "The release package or version metadata is not Big Orbit 1.0.0."
 }

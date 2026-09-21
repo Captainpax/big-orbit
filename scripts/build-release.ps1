@@ -1,5 +1,6 @@
 param(
-    [string]$SigningEnvironment = $env:BIG_ORBIT_SIGNING_ENV_FILE
+    [string]$SigningEnvironment = $env:BIG_ORBIT_SIGNING_ENV_FILE,
+    [string]$DeviceSerial
 )
 
 Set-StrictMode -Version Latest
@@ -41,6 +42,11 @@ try {
         -Apk "app/build/outputs/apk/release/app-release.apk" `
         -ExpectedCertificateSha256 $found["BIG_ORBIT_SIGNING_CERT_SHA256"]
     if ($LASTEXITCODE -ne 0) { throw "Big Orbit release verification failed." }
+    if ($DeviceSerial) {
+        & (Join-Path $PSScriptRoot "verify-release-launch.ps1") `
+            -Apk "app/build/outputs/apk/release/app-release.apk" `
+            -Serial $DeviceSerial
+    }
 }
 finally {
     Pop-Location

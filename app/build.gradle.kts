@@ -10,7 +10,7 @@ android {
         applicationId = "com.littleorbit.bigorbit"
         minSdk = 29
         targetSdk = 36
-        versionCode = 1
+        versionCode = 2
         versionName = "1.0.0"
         manifestPlaceholders["appLabel"] = "Big Orbit"
         manifestPlaceholders["usesCleartextTraffic"] = "false"
