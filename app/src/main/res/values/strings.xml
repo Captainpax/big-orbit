@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Big Orbit</string>
+    <string name="brand_label">BIG ORBIT</string>
+    <string name="refresh_symbol">↻</string>
+    <string name="login_title">Private operations, in your hand</string>
+    <string name="login_subtitle">Enroll this device with your owner password, MFA proof, and a protected device key.</string>
+    <string name="email">Owner email</string>
+    <string name="password">Password</string>
+    <string name="mfa_proof">Authenticator or recovery code</string>
+    <string name="device_label">Device label</string>
+    <string name="enroll_device">Continue securely</string>
+    <string name="setup_mfa">Set up owner MFA</string>
+    <string name="action_inbox">Action inbox</string>
+    <string name="quiz_intelligence">Quiz intelligence</string>
+    <string name="ai_observatory">AI observatory</string>
+    <string name="operations">Operations</string>
+    <string name="devices">Devices</string>
+    <string name="refresh">Refresh</string>
+    <string name="sign_out">Sign out locally</string>
+    <string name="revoke_device">Revoke this device</string>
+    <string name="acknowledge_alerts">Mark visible alerts read</string>
+    <string name="loading">Looking through the telescope…</string>
+    <string name="empty_inbox">All clear. No action is waiting.</string>
+    <string name="network_error">Big Orbit could not reach the private operations API.</string>
+    <string name="learn_now">Learn from this week</string>
+    <string name="generate_week">Generate next week</string>
+    <string name="backup_now">Create encrypted backup</string>
+    <string name="test_restore">Test latest restore</string>
+    <string name="notification_channel">Big Orbit operations</string>
+    <string name="notification_channel_description">Content-free owner alerts from Little Orbit.</string>
+    <string name="complete_fields">Complete every required field.</string>
+    <string name="sign_in_rejected">Sign-in or device proof was not accepted.</string>
+    <string name="verifying_device">Verifying this device…</string>
+    <string name="mfa_setup_title">Set up owner MFA</string>
+    <string name="mfa_setup_help">Sign in, open the authenticator link, then confirm one six-digit code. Recovery codes are shown once.</string>
+    <string name="start_mfa">Create authenticator link</string>
+    <string name="open_authenticator">Open authenticator</string>
+    <string name="confirm_mfa">Confirm code</string>
+    <string name="recovery_codes">Save these recovery codes somewhere private:</string>
+</resources>

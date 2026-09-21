@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="navy">#071225</color>
+    <color name="navy_surface">#0D1B33</color>
+    <color name="lavender">#B9A7FF</color>
+    <color name="lavender_soft">#E0D9FF</color>
+    <color name="coral">#FF8F88</color>
+    <color name="amber">#F4C96B</color>
+    <color name="text_primary">#F8F6FF</color>
+    <color name="text_secondary">#A8B4D1</color>
+    <color name="line">#385171</color>
+</resources>

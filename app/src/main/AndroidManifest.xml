@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:name=".BigOrbitApplication"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="false"
+        android:icon="@drawable/ic_big_orbit"
+        android:label="${appLabel}"
+        android:roundIcon="@drawable/ic_big_orbit"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.BigOrbit"
+        android:usesCleartextTraffic="${usesCleartextTraffic}">
+        <activity android:name=".DevicesActivity" />
+        <activity android:name=".OperationsActivity" />
+        <activity android:name=".AiObservatoryActivity" />
+        <activity android:name=".QuizIntelligenceActivity" />
+        <activity android:name=".MfaSetupActivity" />
+        <activity android:name=".DashboardActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
