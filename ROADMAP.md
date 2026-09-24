@@ -17,5 +17,6 @@ The roadmap records implemented scope and remaining evidence. It does not turn a
 - [x] Expand the AI observatory with local schedule, reviewed-knowledge, public-context, reserve-capacity, weekly-arc, and run-state cards; keep all relationship content unavailable.
 - [x] Make quiz regeneration a fixed allowlisted next-week operation and retain first-party WorkManager alerts.
 - [x] Add a bounded Ubuntu CI workflow, grouped weekly dependency updates, version validation, and complete Markdown/link inventory.
-- [ ] Exercise fresh, wrong-PIN, fifth-failure, expired, process-death, first-MFA, existing-MFA, offline, alert, revocation, large-text, and malformed-response paths on physical devices.
-- [ ] Build, inspect, cold-launch, and publish the exact independently signed code-3 candidate only after Little Orbit 1.3.0 compatibility and production migration are verified. Never reuse a failed candidate code or bytes.
+- [ ] Exercise fresh, wrong-PIN, fifth-failure, expired, process-death, first-MFA, existing-MFA, offline, alert, revocation, large-text, and malformed-response paths on physical devices. The owner requested expedited publication and will perform these observations as live QA; they are not implied by emulator evidence.
+- [x] Build, independently sign, inspect, and cold-launch the exact code-3 candidate on API 36 without a fatal exception or ANR.
+- [ ] Publish code 3 only after Little Orbit 1.3.0 production migration and public compatibility verification. Never reuse a failed candidate code or bytes.

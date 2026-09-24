@@ -5,7 +5,7 @@ Big Orbit is the free, open-source Android owner console for
 the public website and onto an explicitly enrolled device with a non-exportable Android
 Keystore key.
 
-[Big Orbit 1.0.0](https://github.com/Captainpax/big-orbit/releases/tag/v1.0.0) remains the published stable release with package `com.littleorbit.bigorbit`, version code 2, and an independent pinned signer. Source is aligned with [Little Orbit](https://github.com/Captainpax/littleorbit) on the 1.3.0 release train for an intended code-3 candidate. The candidate is not signed or published; its physical-device and production-compatibility gates remain open.
+[Big Orbit 1.0.0](https://github.com/Captainpax/big-orbit/releases/tag/v1.0.0) remains the published stable release with package `com.littleorbit.bigorbit`, version code 2, and an independent pinned signer. Source is aligned with [Little Orbit](https://github.com/Captainpax/littleorbit) on the 1.3.0 release train. The exact code-3 candidate is signed, independently inspected, and cold-launched on an API 36 emulator; publication and physical enrollment QA remain open.
 
 The app intentionally handles operational metadata only. It cannot browse relationship
 notes, quiz answers, custom questions, precise locations, attachments, Smooch content, or
