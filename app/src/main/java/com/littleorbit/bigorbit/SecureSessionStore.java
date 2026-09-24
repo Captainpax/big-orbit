@@ -17,6 +17,7 @@ import org.json.JSONObject;
 public final class SecureSessionStore {
     private static final String ALIAS = "big-orbit-session-storage-v1";
     private static final String KEY = "sealed_admin_state";
+    private static final String BOOTSTRAP_KEY = "sealed_bootstrap_state";
     private static final Object STATE_LOCK = new Object();
     private final SharedPreferences preferences;
 
@@ -51,6 +52,36 @@ public final class SecureSessionStore {
         }
     }
 
+    public BootstrapState readBootstrap() {
+        synchronized (STATE_LOCK) {
+            String sealed = preferences.getString(BOOTSTRAP_KEY, null);
+            if (sealed == null) return null;
+            try {
+                JSONObject value = new JSONObject(open(sealed));
+                return new BootstrapState(
+                        value.getString("setup_token"), value.getString("device_id"));
+            } catch (Exception invalid) {
+                preferences.edit().remove(BOOTSTRAP_KEY).apply();
+                return null;
+            }
+        }
+    }
+
+    public void saveBootstrap(BootstrapState state) throws Exception {
+        synchronized (STATE_LOCK) {
+            JSONObject value = new JSONObject()
+                    .put("setup_token", state.setupToken())
+                    .put("device_id", state.deviceId());
+            preferences.edit().putString(BOOTSTRAP_KEY, seal(value.toString())).apply();
+        }
+    }
+
+    public void clearBootstrap() {
+        synchronized (STATE_LOCK) {
+            preferences.edit().remove(BOOTSTRAP_KEY).apply();
+        }
+    }
+
     public boolean replaceIfCurrent(State expected, State updated) throws Exception {
         synchronized (STATE_LOCK) {
             State current = readLocked();
@@ -70,7 +101,7 @@ public final class SecureSessionStore {
 
     public void clear() {
         synchronized (STATE_LOCK) {
-            preferences.edit().remove(KEY).apply();
+            preferences.edit().remove(KEY).remove(BOOTSTRAP_KEY).apply();
         }
     }
 
@@ -121,4 +152,7 @@ public final class SecureSessionStore {
     }
 
     public record State(String deviceId, String deviceCredential, String accessToken) {}
+
+    /** Short-lived setup capability encrypted separately from approved credentials. */
+    public record BootstrapState(String setupToken, String deviceId) {}
 }

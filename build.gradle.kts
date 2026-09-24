@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.littleorbit"
-version = "1.0.0"
+version = "1.3.0"
 
 val signingValues = listOf(
     "BIG_ORBIT_SIGNING_STORE_FILE",

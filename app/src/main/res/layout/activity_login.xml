@@ -73,6 +73,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/proofContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -123,15 +124,6 @@
                 android:layout_marginTop="20dp"
                 android:minHeight="56dp"
                 android:text="@string/enroll_device" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/mfaSetupButton"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:minHeight="48dp"
-                android:text="@string/setup_mfa" />
 
             <ProgressBar
                 android:id="@+id/loginProgress"

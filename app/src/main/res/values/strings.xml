@@ -4,13 +4,13 @@
     <string name="brand_label">BIG ORBIT</string>
     <string name="refresh_symbol">↻</string>
     <string name="login_title">Private operations, in your hand</string>
-    <string name="login_subtitle">Enroll this device with your owner password, MFA proof, and a protected device key.</string>
+    <string name="login_subtitle">New devices use the one-time PIN printed by the private server. Returning devices use MFA.</string>
     <string name="email">Owner email</string>
     <string name="password">Password</string>
     <string name="mfa_proof">Authenticator or recovery code</string>
+    <string name="bootstrap_pin">One-time 8-digit PIN</string>
     <string name="device_label">Device label</string>
     <string name="enroll_device">Continue securely</string>
-    <string name="setup_mfa">Set up owner MFA</string>
     <string name="action_inbox">Action inbox</string>
     <string name="quiz_intelligence">Quiz intelligence</string>
     <string name="ai_observatory">AI observatory</string>
@@ -29,6 +29,7 @@
     <string name="network_error">Big Orbit could not reach the private operations API.</string>
     <string name="learn_now">Learn from this week</string>
     <string name="generate_week">Generate next week</string>
+    <string name="regenerate_week">Regenerate next week</string>
     <string name="backup_now">Create encrypted backup</string>
     <string name="test_restore">Test latest restore</string>
     <string name="notification_channel">Big Orbit operations</string>
@@ -37,9 +38,21 @@
     <string name="sign_in_rejected">Sign-in or device proof was not accepted.</string>
     <string name="verifying_device">Verifying this device…</string>
     <string name="mfa_setup_title">Set up owner MFA</string>
-    <string name="mfa_setup_help">Sign in, open the authenticator link, then confirm one six-digit code. Recovery codes are shown once.</string>
-    <string name="start_mfa">Create authenticator link</string>
+    <string name="mfa_setup_help">Scan this private QR code with your authenticator, then confirm one current six-digit code. The one-time PIN is already consumed.</string>
+    <string name="mfa_loading">Resuming protected setup…</string>
+    <string name="mfa_ready">Authenticator enrollment is ready.</string>
+    <string name="mfa_confirming">Confirming MFA…</string>
+    <string name="mfa_code_required">Enter the current six-digit authenticator code.</string>
+    <string name="mfa_code_rejected">That code was not accepted.</string>
+    <string name="bootstrap_expired">This setup has expired. Generate a new PIN in the server console.</string>
+    <string name="mfa_enrollment_unavailable">Authenticator setup could not be loaded safely. Return to sign in and try again.</string>
+    <string name="mfa_qr_description">Authenticator setup QR code</string>
+    <string name="authenticator_code">Six-digit authenticator code</string>
     <string name="open_authenticator">Open authenticator</string>
     <string name="confirm_mfa">Confirm code</string>
+    <string name="continue_dashboard">I saved the codes — continue</string>
+    <string name="return_to_login">Return to sign in</string>
+    <string name="try_again">Try again</string>
+    <string name="no_authenticator">No authenticator app could open this link. Copy it manually.</string>
     <string name="recovery_codes">Save these recovery codes somewhere private:</string>
 </resources>

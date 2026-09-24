@@ -6,7 +6,9 @@ public final class ChallengeMessage {
 
     public static String canonical(
             String purpose, String challengeId, String challenge) {
-        if (!("session".equals(purpose) || "enrollment".equals(purpose))) {
+        if (!("session".equals(purpose)
+                || "enrollment".equals(purpose)
+                || "bootstrap".equals(purpose))) {
             throw new IllegalArgumentException("Unsupported challenge purpose");
         }
         return "big-orbit:" + purpose + ":" + challengeId + ":" + challenge;

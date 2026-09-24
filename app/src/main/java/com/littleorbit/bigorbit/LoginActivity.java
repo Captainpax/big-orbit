@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -33,12 +34,18 @@ public final class LoginActivity extends AppCompatActivity {
         deviceLabel = findViewById(R.id.deviceLabelInput);
         progress = findViewById(R.id.loginProgress);
         status = findViewById(R.id.loginStatus);
-        findViewById(R.id.deviceLabelContainer).setVisibility(
-                sessions.isEnrolled() ? View.GONE : View.VISIBLE);
-        if (!sessions.isEnrolled()) deviceLabel.setText(android.os.Build.MODEL);
+        boolean enrolled = sessions.isEnrolled();
+        findViewById(R.id.deviceLabelContainer).setVisibility(enrolled ? View.GONE : View.VISIBLE);
+        TextInputLayout proofContainer = findViewById(R.id.proofContainer);
+        proofContainer.setHint(enrolled ? R.string.mfa_proof : R.string.bootstrap_pin);
+        proof.setInputType(enrolled
+                ? android.text.InputType.TYPE_CLASS_TEXT
+                | android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                : android.text.InputType.TYPE_CLASS_NUMBER
+                | android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        if (!enrolled) deviceLabel.setText(android.os.Build.MODEL);
         findViewById(R.id.loginButton).setOnClickListener(ignored -> submit());
-        findViewById(R.id.mfaSetupButton).setOnClickListener(ignored ->
-                startActivity(new Intent(this, MfaSetupActivity.class)));
+        if (sessions.hasBootstrap()) openMfaSetup();
     }
 
     private void submit() {
@@ -54,12 +61,16 @@ public final class LoginActivity extends AppCompatActivity {
         busy(true);
         executor.execute(() -> {
             try {
-                sessions.login(emailValue, passwordValue, proofValue, labelValue);
-                main.post(this::openDashboard);
+                AdminSessionCoordinator.LoginResult result =
+                        sessions.login(emailValue, passwordValue, proofValue, labelValue);
+                main.post(result == AdminSessionCoordinator.LoginResult.MFA_REQUIRED
+                        ? this::openMfaSetup : this::openDashboard);
             } catch (Exception failure) {
+                boolean resumable = sessions.hasBootstrap();
                 main.post(() -> {
                     busy(false);
-                    status.setText(R.string.sign_in_rejected);
+                    if (resumable) openMfaSetup();
+                    else status.setText(R.string.sign_in_rejected);
                 });
             }
         });
@@ -68,6 +79,10 @@ public final class LoginActivity extends AppCompatActivity {
     private void openDashboard() {
         startActivity(new Intent(this, DashboardActivity.class));
         finish();
+    }
+
+    private void openMfaSetup() {
+        startActivity(new Intent(this, MfaSetupActivity.class));
     }
 
     private void busy(boolean value) {

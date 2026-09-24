@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 /** Device enrollment, proof-of-possession, and short-session rotation workflow. */
 public final class AdminSessionCoordinator {
+    public enum LoginResult { SIGNED_IN, MFA_REQUIRED }
     private final ApiClient api = new ApiClient();
     private final DeviceKeyStore keys = new DeviceKeyStore();
     private final Context context;
@@ -26,18 +27,23 @@ public final class AdminSessionCoordinator {
         return state != null && !state.accessToken().isBlank();
     }
 
+    public boolean hasBootstrap() {
+        return sessions.readBootstrap() != null;
+    }
+
     public String currentDeviceId() {
         SecureSessionStore.State state = sessions.read();
         return state == null ? null : state.deviceId();
     }
 
-    public void login(
+    public LoginResult login(
             String email, String password, String mfaProof, String deviceLabel) throws Exception {
         SecureSessionStore.State state = sessions.read();
         if (state == null) {
-            enroll(email, password, mfaProof, deviceLabel);
+            return bootstrap(email, password, mfaProof, deviceLabel);
         } else {
             passwordSession(email, password, mfaProof, state);
+            return LoginResult.SIGNED_IN;
         }
     }
 
@@ -118,25 +124,37 @@ public final class AdminSessionCoordinator {
         }
     }
 
-    private void enroll(
-            String email, String password, String proof, String deviceLabel) throws Exception {
-        JSONObject request = credentials(email, password, proof)
+    private LoginResult bootstrap(
+            String email, String password, String pin, String deviceLabel) throws Exception {
+        JSONObject request = new JSONObject()
+                .put("email", email)
+                .put("password", password)
+                .put("pin", pin)
                 .put("enrollment_public_key", keys.publicKeySpki())
                 .put("device_label", deviceLabel);
-        JSONObject response = api.post("/v2/admin/session", request, null);
-        String token = response.getString("access_token");
+        JSONObject response = api.post("/v2/admin/bootstrap/session", request, null);
+        String token = response.getString("setup_token");
         String deviceId = response.getString("device_id");
-        JSONObject challenge = response.getJSONObject("enrollment_challenge");
+        sessions.saveBootstrap(new SecureSessionStore.BootstrapState(token, deviceId));
+        JSONObject challenge = response.getJSONObject("challenge");
         String challengeId = challenge.getString("challenge_id");
         String raw = challenge.getString("challenge");
         JSONObject confirm = new JSONObject()
                 .put("challenge_id", challengeId)
                 .put("challenge", raw)
-                .put("signature", keys.sign("enrollment", challengeId, raw));
-        JSONObject enrolled = api.post(
-                "/v2/admin/devices/" + deviceId + "/confirm", confirm, token);
+                .put("signature", keys.sign("bootstrap", challengeId, raw));
+        JSONObject result = api.post("/v2/admin/bootstrap/device-confirm", confirm, token);
+        if (!result.optBoolean("completed")) return LoginResult.MFA_REQUIRED;
+        saveCompletion(result.getJSONObject("completion"));
+        return LoginResult.SIGNED_IN;
+    }
+
+    void saveCompletion(JSONObject completion) throws Exception {
         sessions.save(new SecureSessionStore.State(
-                deviceId, enrolled.getString("device_credential"), token));
+                completion.getString("device_id"),
+                completion.getString("device_credential"),
+                completion.getString("access_token")));
+        sessions.clearBootstrap();
     }
 
     private void passwordSession(

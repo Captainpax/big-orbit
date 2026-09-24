@@ -14,6 +14,9 @@ public final class ChallengeMessageTest {
         assertEquals(
                 "big-orbit:enrollment:1234:random-value",
                 ChallengeMessage.canonical("enrollment", "1234", "random-value"));
+        assertEquals(
+                "big-orbit:bootstrap:1234:random-value",
+                ChallengeMessage.canonical("bootstrap", "1234", "random-value"));
     }
 
     @Test

@@ -10,8 +10,8 @@ android {
         applicationId = "com.littleorbit.bigorbit"
         minSdk = 29
         targetSdk = 36
-        versionCode = 2
-        versionName = "1.0.0"
+        versionCode = 3
+        versionName = "1.3.0"
         manifestPlaceholders["appLabel"] = "Big Orbit"
         manifestPlaceholders["usesCleartextTraffic"] = "false"
         buildConfigField("String", "API_BASE_URL", "\"https://lil-orb.pax-kun.com/api\"")

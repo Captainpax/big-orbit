@@ -8,4 +8,6 @@ These files are generated design references with simulated data, not production 
 - `big-orbit-ai-observatory-concept.png`
 
 The editable product implementation remains Android Java/XML; concepts do not establish a
-security or API contract.
+security or API contract. Version 1.3 reuses this visual language for terminal-PIN login,
+protected authenticator setup, and expanded metadata-only observability. Those additions are
+implementation work, not new concept sheets or production screenshots.

@@ -66,9 +66,9 @@ if ($expected.Length -ne 64 -or $certificate -ne $expected) {
 $packageName = (& $apkanalyzer manifest application-id $apkPath).Trim()
 $versionCode = [int](& $apkanalyzer manifest version-code $apkPath).Trim()
 $versionName = (& $apkanalyzer manifest version-name $apkPath).Trim()
-if ($packageName -ne "com.littleorbit.bigorbit" -or $versionCode -ne 2 -or
-        $versionName -ne "1.0.0") {
-    throw "The release package or version metadata is not Big Orbit 1.0.0."
+if ($packageName -ne "com.littleorbit.bigorbit" -or $versionCode -ne 3 -or
+        $versionName -ne "1.3.0") {
+    throw "The release package or version metadata is not Big Orbit 1.3.0."
 }
 $outputPath = [IO.Path]::GetFullPath((Join-Path $repoRoot $OutputDirectory))
 $prefix = $repoRoot.TrimEnd([IO.Path]::DirectorySeparatorChar) +
@@ -87,6 +87,6 @@ $metadata = [ordered]@{
     certificate_sha256 = $certificate
     verified_at = (Get-Date).ToUniversalTime().ToString("o")
 }
-$metadataPath = Join-Path $outputPath "big-orbit-1.0.0.json"
+$metadataPath = Join-Path $outputPath "big-orbit-1.3.0.json"
 $metadata | ConvertTo-Json | Set-Content -LiteralPath $metadataPath -Encoding utf8
 $metadata | ConvertTo-Json

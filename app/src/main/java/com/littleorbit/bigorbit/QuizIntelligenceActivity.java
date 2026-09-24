@@ -21,11 +21,12 @@ public final class QuizIntelligenceActivity extends ConsoleActivity {
                 "K-anonymous ratings guide Saturday learning; no answers or couple identities appear here.",
                 R.id.nav_quizzes);
         primaryAction.setText(R.string.learn_now);
-        secondaryAction.setText(R.string.generate_week);
+        secondaryAction.setText(R.string.regenerate_week);
         primaryAction.setVisibility(View.VISIBLE);
         secondaryAction.setVisibility(View.VISIBLE);
         primaryAction.setOnClickListener(ignored -> queue("learn_quizzes", currentMonday()));
-        secondaryAction.setOnClickListener(ignored -> queue("generate_quizzes", nextMonday()));
+        secondaryAction.setOnClickListener(
+                ignored -> queue("regenerate_quizzes", nextMonday()));
         refresh();
     }
 
