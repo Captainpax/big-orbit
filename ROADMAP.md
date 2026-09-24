@@ -19,4 +19,4 @@ The roadmap records implemented scope and remaining evidence. It does not turn a
 - [x] Add a bounded Ubuntu CI workflow, grouped weekly dependency updates, version validation, and complete Markdown/link inventory.
 - [ ] Exercise fresh, wrong-PIN, fifth-failure, expired, process-death, first-MFA, existing-MFA, offline, alert, revocation, large-text, and malformed-response paths on physical devices. The owner requested expedited publication and will perform these observations as live QA; they are not implied by emulator evidence.
 - [x] Build, independently sign, inspect, and cold-launch the exact code-3 candidate on API 36 without a fatal exception or ANR.
-- [ ] Publish code 3 only after Little Orbit 1.3.0 production migration and public compatibility verification. Never reuse a failed candidate code or bytes.
+- [x] Publish code 3 after Little Orbit 1.3.0 reached migration head 0031 and passed public compatibility verification. GitHub published the exact immutable code-3 artifact at `2026-09-24T02:23:00Z`; no failed candidate code or bytes were reused.

@@ -5,7 +5,7 @@ Big Orbit is the free, open-source Android owner console for
 the public website and onto an explicitly enrolled device with a non-exportable Android
 Keystore key.
 
-[Big Orbit 1.0.0](https://github.com/Captainpax/big-orbit/releases/tag/v1.0.0) remains the published stable release with package `com.littleorbit.bigorbit`, version code 2, and an independent pinned signer. Source is aligned with [Little Orbit](https://github.com/Captainpax/littleorbit) on the 1.3.0 release train. The exact code-3 candidate is signed, independently inspected, and cold-launched on an API 36 emulator; publication and physical enrollment QA remain open.
+[Big Orbit 1.3.0](https://github.com/Captainpax/big-orbit/releases/tag/v1.3.0) is the published stable release with package `com.littleorbit.bigorbit`, version code 3, and an independent pinned signer. It is aligned with [Little Orbit 1.3.0](https://github.com/Captainpax/littleorbit/releases/tag/v1.3.0), independently inspected, and cold-launched on an API 36 emulator. Physical enrollment and revocation QA remain deferred live-device evidence.
 
 The app intentionally handles operational metadata only. It cannot browse relationship
 notes, quiz answers, custom questions, precise locations, attachments, Smooch content, or
@@ -86,6 +86,6 @@ tablet emulator. It contains only simulated device information and no owner cred
 
 ## Server compatibility
 
-Big Orbit 1.3.0 source targets Little Orbit 1.3.0's `/v2/admin` API; the published 1.0.0 app targets Little Orbit 1.2.0. There is no arbitrary command, SQL, URL, prompt, model option, or filesystem input in the operations contract. The public Little Orbit website does not host an administrator panel. See the [shared Little Orbit release note](https://github.com/Captainpax/littleorbit/blob/main/docs/releases/1.3.0.md), this repository's [candidate note](docs/releases/1.3.0.md), and [roadmap](ROADMAP.md).
+Big Orbit 1.3.0 targets Little Orbit 1.3.0's `/v2/admin` API. There is no arbitrary command, SQL, URL, prompt, model option, or filesystem input in the operations contract. The public Little Orbit website does not host an administrator panel. See the [shared Little Orbit release note](https://github.com/Captainpax/littleorbit/blob/main/docs/releases/1.3.0.md), this repository's [release note](docs/releases/1.3.0.md), and [roadmap](ROADMAP.md).
 
 Licensed under the [MIT License](LICENSE).

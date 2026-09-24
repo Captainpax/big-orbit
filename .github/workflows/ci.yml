@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   android:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -29,9 +29,8 @@ jobs:
           distribution: temurin
           java-version: "17"
           cache: gradle
-      - uses: android-actions/setup-android@v4
-        with:
-          packages: platform-tools
-          log-accepted-android-sdk-licenses: false
-      - run: sdkmanager "platform-tools" "platforms;android-37" "build-tools;37.0.0"
+      - name: Verify preinstalled Android SDK
+        run: >-
+          test -d "$ANDROID_SDK_ROOT/platforms/android-37"
+          && test -d "$ANDROID_SDK_ROOT/build-tools/37.0.0"
       - run: ./gradlew testDebugUnitTest lintDebug assembleDebug --stacktrace

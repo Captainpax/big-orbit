@@ -13,5 +13,6 @@ to bypass PIN attempt/expiry/consumption, use a bootstrap bearer on an ordinary 
 skip device binding, replay a challenge, replace existing MFA during enrollment, cross
 administrator accounts, or obtain private relationship data is high priority.
 
-The published stable release is 1.0.0 code 2. Version 1.3.0 code 3 is source-candidate scope
-until its independently signed APK and Little Orbit 1.3 deployment pass the recorded gates.
+The published stable release is 1.3.0 code 3. Its independently signed APK is compatible
+with the published Little Orbit 1.3.0 API; deferred physical-device observations are recorded
+separately and are not presented as completed security evidence.

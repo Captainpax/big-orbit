@@ -26,24 +26,21 @@
 
 No release or hardware validation is implied by the presence of this guide.
 
-## 1.3.0 candidate gate
+## Published 1.3.0 identity
 
-The current source intends version 1.3.0 code 3 and must connect only to a deployed compatible Little Orbit 1.3.0 API. Before signing, verify the shared release-train contract in both repositories. After signing, cold-launch the exact minified APK, complete both first-owner and existing-MFA device flows, inspect generic notifications and metadata-only observability, and verify malformed QR recovery. Record exact size, SHA-256, certificate SHA-256, commit, and device evidence in a new immutable release record. Until then, do not change the stable download or tag from 1.0.0 code 2.
+Big Orbit 1.3.0 code 3 connects only to the deployed compatible Little Orbit 1.3.0 API. The shared release-train contract passed in both repositories, and the exact minified APK was independently inspected and cold-launched on API 36 before publication. The immutable record retains its exact size, SHA-256, certificate SHA-256, source commit, production compatibility, and explicitly deferred physical-device evidence.
 
-## Published 1.0.0 identity
-
-- Package: `com.littleorbit.bigorbit`; version `1.0.0`; version code `2`.
-- Size: 2,475,090 bytes.
-- SHA-256: `ef4c10509709504394078835d1b74db44788999fff65dfb0f68e8bee7821a824`.
+- Package: `com.littleorbit.bigorbit`; version `1.3.0`; version code `3`.
+- Size: 2,485,190 bytes.
+- SHA-256: `deccc454920c08793b3ce56b570b5c049343a48a7008984d7de0f91713ea8a5b`.
 - Certificate SHA-256: `04dc3502933faaa99dfd6641acc52b2bd71c9895087cb3060e3ce92dd8406f8c`.
 - The artifact contains no smoke package, label, endpoint, signing metadata, or bundled QA APK.
 
 The exact APK and verification JSON are published at
-[`v1.0.0`](https://github.com/Captainpax/big-orbit/releases/tag/v1.0.0). The production Little
+[`v1.3.0`](https://github.com/Captainpax/big-orbit/releases/tag/v1.3.0). The production Little
 Orbit API exposes only device-bound `/v2/admin`; the legacy web and `/v1/admin` routes return 404.
-The owner waived production two-device enrollment, cross-device revocation, alert, and recovery
-observation as publication gates and will report that QA later. Those checks are not treated as
-passed by this release record.
+The owner deferred physical fresh/returning enrollment, cross-device revocation, alert, recovery,
+and large-text observation to live QA. Those checks are not treated as passed by this release record.
 
 Version code 1 was signed but failed its exact release-mode launch check because R8 removed the
 reflectively created WorkManager Room database constructor. It was never published and is not

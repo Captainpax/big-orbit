@@ -1,6 +1,6 @@
-# Big Orbit 1.3.0 source verification — 2026-09-23
+# Big Orbit 1.3.0 release verification — 2026-09-23
 
-This covers local implementation verification and the exact signed/emulator-tested candidate. It is not a physical-device, Little Orbit production-migration, or publication claim.
+This covers local implementation verification, the exact signed/emulator-tested artifact, Little Orbit production compatibility, and publication. It is not a physical-device claim.
 
 Verified:
 
@@ -14,9 +14,14 @@ Verified:
 - Independent inspection confirms the APK is non-debuggable, targets API 36, disables backup and cleartext traffic, and contains none of the checked smoke package, QA label, or loopback endpoint markers.
 - The exact APK fresh-installed beside Little Orbit smoke on an API 36 emulator, resolved `LoginActivity`, cold-launched with a live process, rendered the terminal-PIN/MFA screen, and produced no matching fatal exception or ANR.
 
-Open:
+Production compatibility and publication:
 
-- No physical fresh-device, returning-device, expiry, fifth-failure, process-death, large-text, notification, or revocation matrix has run for this candidate.
+- Little Orbit production migrated through 0030 and 0031 to head 0031, reported API version 1.3.0, and exposed only the device-bound `/v2/admin` surface. The compatibility floor remains phone code 23 with no forced-update deadline.
+- The exact immutable [Big Orbit 1.3.0 release](https://github.com/Captainpax/big-orbit/releases/tag/v1.3.0) was published at `2026-09-24T02:23:00Z`. Its GitHub asset byte count and digest match the inspected artifact above.
+- Little Orbit published its matching immutable API record at `2026-09-24T02:33:46.511784Z` after a passing coordinated encrypted backup/restore drill. Public readiness, release metadata, complete and ranged APK downloads, patch notes, RSS, and rollout logs were verified from the Little Orbit release host.
+- The first hosted Android job failed before Gradle because the setup action requested a removed legacy SDK tools package. The bounded workflow now pins Ubuntu 24.04 and verifies its preinstalled Android 37 platform and Build Tools 37.0.0 before running unit tests, lint, and debug assembly.
+
+Deferred physical-device evidence:
+
+- No physical fresh-device, returning-device, expiry, fifth-failure, process-death, large-text, notification, or revocation matrix has run for this release.
 - No physical code-3 cold launch or fresh/returning enrollment flow has run; the owner requested expedited publication and will perform those observations as live QA.
-- Little Orbit 1.3 production migration and compatibility have not run.
-- Big Orbit 1.0.0 code 2 remains the published stable artifact.
